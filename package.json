@@ -1,15 +1,15 @@
 {
-  "name": "legarant",
-  "version": "1.0.0",
-  "description": "This app is for OpenClassrooms Project 12",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Abdullah Al-Shoaibi",
-  "license": "ISC",
-  "dependencies": {
-    "body-parser": "^1.19.0",
-    "express": "^4.17.1"
-  }
+    "name": "legarant",
+    "version": "1.0.0",
+    "description": "This app is for OpenClassrooms Project 12",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "author": "Abdullah Al-Shoaibi",
+    "license": "ISC",
+    "dependencies": {
+        "body-parser": "^1.19.0",
+        "express": "^4.17.1"
+    }
 }
