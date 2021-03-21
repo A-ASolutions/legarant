@@ -17,13 +17,11 @@ const connectionString = process.env.DATABASE_URL || 'postgres://lovoalxadtvizy:
 if (process.env.DATABASE_URL !== undefined) {
     pg.defaults.ssl = true;
 }
-const { Client } = require('pg');
 
 
-const client = new Client({
-    connectionStr: connectionString,
-    ssl: { rejectUnauthorized: false }
-});
+
+const client = new pg.Client(connectionString);
+
 client.connect();
 
 app.get('/contacts', (req, res) => {
