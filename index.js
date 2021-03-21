@@ -14,7 +14,7 @@ app.use(express.json());
 
 let connectionString = process.env.DATABASE_URL || 'postgres://lovoalxadtvizy:4f2e301d61a7bde9feb156f42d47e5519a32e6dde0624415dede8773e3f133ec@ec2-52-7-115-250.compute-1.amazonaws.com:5432/d8mnkbfbjuhb0s';
 const { Client } = require('pg');
-const { error } = require('console');
+
 
 const client = new Client({
     connectionStr: connectionString,
