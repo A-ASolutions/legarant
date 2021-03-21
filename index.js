@@ -7,8 +7,8 @@ let pg = require('pg');
 
 
 const app = express();
-app.use(bodyParser.json);
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
 
