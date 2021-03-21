@@ -1,9 +1,7 @@
 const path = require('path');
 const express = require('express');
-const pg = require('pg');
 const port = process.env.PORT || 3000;
-
-
+let pg = require('pg');
 
 const app = express();
 
@@ -12,16 +10,13 @@ app.use(express.json());
 
 
 
+let connectionString = process.env.DATABASE_URL || 'postgres://lovoalxadtvizy:4f2e301d61a7bde9feb156f42d47e5519a32e6dde0624415dede8773e3f133ec@ec2-52-7-115-250.compute-1.amazonaws.com:5432/d8mnkbfbjuhb0s';
+const { Client } = require('pg');
 
-const connectionString = process.env.DATABASE_URL || 'postgres://lovoalxadtvizy:4f2e301d61a7bde9feb156f42d47e5519a32e6dde0624415dede8773e3f133ec@ec2-52-7-115-250.compute-1.amazonaws.com:5432/d8mnkbfbjuhb0s';
-if (process.env.DATABASE_URL !== undefined) {
-    pg.defaults.ssl = true;
-}
-
-
-
-const client = new pg.Client(connectionString);
-
+const client = new Client({
+    connectionStr: connectionString,
+    ssl: { rejectUnauthorized: false }
+});
 client.connect();
 
 app.get('/contacts', (req, res) => {
@@ -75,7 +70,6 @@ app.put('/contacts/:id', (req, res) => {
         }
     });
 
-
 });
 
 //deactivate a contact
@@ -123,9 +117,7 @@ app.put('/contract', (req, res) => {
         });
     });
 
-
 });
-
 
 
 
