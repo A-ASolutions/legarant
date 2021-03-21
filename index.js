@@ -19,7 +19,7 @@ const client = new Client({
 });
 client.connect();
 
-app.get('/', (req, res) => {
+app.get('/contacts', (req, res) => {
     client.query('SELECT * FROM salesforce.Contact', (err, data) => {
         res.json(data);
     });
