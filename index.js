@@ -35,7 +35,7 @@ app.post('/contacts', (req, res) => {
     let { email } = req.params;
     let { lastname } = req.params;
 
-    client.query('SELECT sfid, id FROM salesforce.Contact WHERE email=$1 AND lastname= $2', [email, lastname], (err, data) => {
+    client.query('SELECT sfid, id FROM salesforce.Contact WHERE email=$1', [email], (err, data) => {
         if (data !== undefined) {
             if (data.rowCount == 0) {
                 client.query('INSERT INTO salesforce.Contact (lastname, email)  VALUES ($1, $2)', [lastname, email], (err, d) => {
@@ -57,6 +57,7 @@ app.post('/contacts', (req, res) => {
     })
 })
 
+//update a contact
 app.put('/contacts/:id', (req, res) => {
     const { id } = req.params;
     let { name } = req.body.name;
