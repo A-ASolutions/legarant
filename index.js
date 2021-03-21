@@ -17,7 +17,7 @@ const { Client } = require('pg');
 const { error } = require('console');
 
 const client = new Client({
-    connectionString: connectionStr,
+    connectionStr: connectionString,
     ssl: { rejectUnauthorized: false }
 });
 client.connect();
