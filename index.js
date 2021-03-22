@@ -32,7 +32,7 @@ app.get('/contacts', (req, res) => {
 
 // create a contact after checking if it already exists or not
 
-app.get('/contacts', (req, res) => {
+app.post('/contacts', (req, res) => {
 
     let { email } = req.params;
     let { lastname } = req.params;
