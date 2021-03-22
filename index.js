@@ -32,33 +32,57 @@ app.get('/contacts', (req, res) => {
 
 // create a contact after checking if it already exists or not
 
-app.post('/contacts', (req, res) => {
+/*app.post('/contacts', (req, res) => {
 
-    let { email } = req.params;
-    let { lastname } = req.params;
+let { email } = req.params;
+let { lastname } = req.params;
 
-    client.query('SELECT sfid, id FROM salesforce.Contact WHERE email=$1', [email], (err, data) => {
-        if (data !== undefined) {
-            if (data.rowCount == 0) {
-                client.query('INSERT INTO salesforce.Contact (lastname, email)  VALUES ($1, $2)', [lastname, email], (err, d) => {
-                    if (d.rowCount == 0) {
-                        res.send('Something went wrong please check your entries');
-                    } else {
-                        client.query('SELECT sfid, id FROM salesforce.Contact WHERE email = $1', [email], (err, data) => {
-                            res.json(data.rows[0].id)
-                        })
-                    }
-
-                });
-
+client.query('SELECT sfid, id FROM salesforce.Contact WHERE email=$1', [email], (err, data) => {
+if (data !== undefined) {
+    if (data.rowCount == 0) {
+        client.query('INSERT INTO salesforce.Contact (lastname, email)  VALUES ($1, $2)', [lastname, email], (err, d) => {
+            if (d.rowCount == 0) {
+                res.send('Something went wrong please check your entries');
             } else {
-                res.json(data.rows[0]);
+                client.query('SELECT sfid, id FROM salesforce.Contact WHERE email = $1', [email], (err, data) => {
+                    res.json(data.rows[0].id)
+                })
             }
 
-        }
-    })
-})
+        });
 
+    } else {
+        res.json(data.rows[0]);
+    }
+
+}
+})
+})*/
+app.post('/contacts', (req, res) => {
+
+    try {
+        let { email } = req.params;
+        let { lastname } = req.params;
+
+        const createContact = lient.query('SELECT sfid, id FROM salesforce.Contact WHERE email=$1', [email]);
+        if (createContact !== undefined) {
+            if (createContact.rowCount == 0) {
+                createContact = client.query('INSERT INTO salesforce.Contact (lastname, email)  VALUES ($1, $2)', [lastname, email]);
+                res.send("contact has been added successfully");
+            } else {
+                createContact = client.query('SELECT sfid, id FROM salesforce.Contact WHERE email = $1', [email]);
+                res.json(createContact.rows[0].id);
+            }
+        } else {
+            res.json(createContact.rows[0]);
+
+        }
+    } catch (err) {
+        console.error(err.message);
+
+    }
+
+});
 //update a contact
 app.put('/contacts/:id', (req, res) => {
     const { id } = req.params;
