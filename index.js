@@ -23,22 +23,14 @@ const client = new Client({
 client.connect();
 
 app.get('/contacts', (req, res) => {
-    /*try {
-    const allContacts = client.query('SELECT * FROM salesforce.Contact');
-    res.json(allContacts.rows);
-} catch (err) {
-    console.error(err.message);*/
+    try {
+        const allContacts = client.query('SELECT * FROM salesforce.Contact');
+        res.json(allContacts.rows);
+    } catch (err) {
+        console.error(err.message);
 
 
-    pg.connect(connectionString, (err, client, done) => {
-        client.query('SELECT * FROM salesforce.Contact', (err, result) => {
-            done();
-            if (err) return console.error(err);
-            console.log(result.rows);
-        });
-    });
-
-    //}
+    }
 });
 
 // create a contact after checking if it already exists or not
