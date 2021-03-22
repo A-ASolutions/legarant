@@ -4,10 +4,9 @@ const port = process.env.PORT || 3000;
 let pg = require('pg');
 const bodyParser = require('body-parser');
 
+const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
-
-const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
