@@ -3,8 +3,7 @@ const express = require('express');
 const port = process.env.PORT || 3000;
 let pg = require('pg');
 const bodyParser = require('body-parser');
-app.use(express.static('www'));
-app.use(express.static(path.join('www', 'build')));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
 
