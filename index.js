@@ -58,6 +58,8 @@ if (data !== undefined) {
 }
 })
 })*/
+
+/*
 app.post('/contacts', (req, res) => {
 
     try {
@@ -82,7 +84,19 @@ app.post('/contacts', (req, res) => {
 
     }
 
+});*/
+app.post('/contacts', (req, res) => {
+
+    try {
+        const lastName = req.body;
+        const newContact = createContact = client.query('INSERT INTO salesforce.Contact (lastname)  VALUES ($1)', [lastname]);
+        res.json(newContact.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+    }
 });
+
+
 //update a contact
 app.put('/contacts/:id', (req, res) => {
     const { id } = req.params;
