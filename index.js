@@ -13,7 +13,7 @@ app.use(express.json());
 
 
 
-let connectionString = process.env.DATABASE_URL || 'postgres://lovoalxadtvizy:4f2e301d61a7bde9feb156f42d47e5519a32e6dde0624415dede8773e3f133ec@ec2-52-7-115-250.compute-1.amazonaws.com:5432/d8mnkbfbjuhb0s';
+let connectionString = process.env.DATABASE_URL || 'postgres://pbticiobojhesl:c5f1056964101ea3f914f934d6d4ec1c4370e13406c8745060e60d91b38a6948@ec2-54-90-13-87.compute-1.amazonaws.com:5432/d9ntfu7nqhbbo1';
 const { Client } = require('pg');
 
 const client = new Client({
