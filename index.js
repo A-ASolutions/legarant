@@ -17,9 +17,10 @@ const client = new Client({
     connectionStr: connectionString,
     ssl: { rejectUnauthorized: false }
 });
-client.connect();
+
 
 app.get('/contacts', (req, res) => {
+    client.connect();
     client.query('SELECT Email, Id FROM salesforce.contact', (err, data) => {
         if (err) {
             console.log('Can not log into database', err);
@@ -27,7 +28,6 @@ app.get('/contacts', (req, res) => {
             console.log(data.rows);
             res.json(data.rows);
         }
-
     });
 });
 
