@@ -31,6 +31,20 @@ app.get('/contacts', (req, res) => {
     }
 });
 
+app.get('/example', (req, res) => {
+    try {
+        console.log('Connect to database...');
+        client.query('SELECT Id, Email FROM salesforce.contact', function(err, result) {
+            res.write('<li>' + result.rows + '</li>');
+
+        });
+    } catch (err) {
+        console.error(err.message);
+
+
+    }
+});
+
 
 
 
