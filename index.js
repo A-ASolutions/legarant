@@ -93,7 +93,7 @@ app.post('/contacts', (req, res) => {
     try {
         const {
             lastName
-        } = req.body;
+        } = req.body.lastName;
         const newContact = createContact = client.query('INSERT INTO salesforce.Contact (lastname)  VALUES ($1)', [lastName]);
         res.json(newContact.rows[0]);
         console.log('its working');
