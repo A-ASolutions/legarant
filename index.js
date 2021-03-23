@@ -10,24 +10,22 @@ app.use(express.json());
 
 
 
-let connectionString = process.env.DATABASE_URL || 'postgres://pbticiobojhesl:c5f1056964101ea3f914f934d6d4ec1c4370e13406c8745060e60d91b38a6948@ec2-54-90-13-87.compute-1.amazonaws.com:5432/d9ntfu7nqhbbo1';
-const { Client } = require('pg').native;
+let connectionString = process.env.DATABASE_URL;
+const { Client } = require('pg');
 
 const client = new Client({
     connectionStr: connectionString,
     ssl: { rejectUnauthorized: false }
 });
 
+client.connect();
 
 app.get('/contacts', (req, res) => {
-    client.connect();
-    client.query('SELECT Email, Id FROM salesforce.contact', (err, data) => {
-        if (err) {
-            console.log('Can not log into database', err);
-        } else {
-            console.log(data.rows);
-            res.json(data.rows);
-        }
+    client.query('SELECT Email, Id FROM salesforce.contact;', (err, data) => {
+        if (err) throw err;
+        console.log(data.rows);
+        res.json(data.rows);
+        client.end();
     });
 });
 
