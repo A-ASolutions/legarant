@@ -22,8 +22,8 @@ client.connect();
 app.get('/contacts', (req, res) => {
     try {
         const allContacts = client.query('SELECT Email, Id FROM salesforce.contact');
-        console.log(allContacts.rows);
-        res.json(allContacts.rows);
+        console.log(allContacts);
+        res.json(allContacts);
     } catch (err) {
         console.error(err.message);
 
