@@ -22,7 +22,7 @@ const client = new Client({
 });
 client.connect();
 
-app.get('/contacts', (req, res) => {
+/*app.get('/contacts', (req, res) => {
     try {
         const allContacts = client.query('SELECT * FROM salesforce.Contact');
         res.json(allContacts.rows);
@@ -31,7 +31,14 @@ app.get('/contacts', (req, res) => {
 
 
     }
+});*/
+app.get('/contacts', (req, res) => {
+    client.query('SELECT * FROM salesforce.Contact', (err, data) => {
+        res.json(data);
+    });
 });
+
+
 
 // create a contact after checking if it already exists or not
 
