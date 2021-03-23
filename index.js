@@ -20,15 +20,15 @@ const client = new Client({
 client.connect();
 
 app.get('/contacts', (req, res) => {
-    try {
-        const allContacts = client.query('SELECT Email, Id FROM salesforce.contact');
-        console.log(allContacts);
-        res.json(allContacts);
-    } catch (err) {
-        console.error(err.message);
+    client.query('SELECT Email, Id FROM salesforce.contact', (err, data) => {
+        if (err) {
+            console.log('Can not log into database', err);
+        } else {
+            console.log(data.rows);
+            res.json(data.rows);
+        }
 
-
-    }
+    });
 });
 
 app.get('/example', (req, res) => {
