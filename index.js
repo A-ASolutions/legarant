@@ -23,7 +23,7 @@ app.get('/contacts', (req, res) => {
     try {
         const allContacts = client.query('SELECT * FROM salesforce.contact');
         console.log(allContacts.rows);
-        res.json(allContacts.rows);
+        res.json({ name: 'abdullah' });
     } catch (err) {
         console.error(err.message);
 
