@@ -17,31 +17,21 @@ const client = new Client({
     connectionStr: connectionString,
     ssl: { rejectUnauthorized: false }
 });
-
 client.connect();
 
 app.get('/contacts', (req, res) => {
-    client.query('\dt salesforce.*;', (err, data) => {
-        if (err) throw err;
-        console.log(data.rows);
-        res.json(data.rows);
-        client.end();
-    });
+    try {
+        const allContacts = client.query('SELECT * FROM salesforce.contact');
+        console.log(allContacts);
+        res.json(allContacts);
+    } catch (err) {
+        console.error(err.message);
+
+
+    }
 });
 
-app.get('/example', (req, res) => {
-    pg.connect(connectionString, function(err, client, done) {
-        if (err) {
-            console.log('Can not log into database');
-        } else {
-            console.log('Connect to database...');
-            client.query('SELECT Id, email  FROM salesforce.contact', function(err, result) {
-                res.write('<li>' + result.rows + '</li>');
-                done();
-            });
-        }
-    });
-});
+
 
 
 
