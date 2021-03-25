@@ -113,8 +113,8 @@ app.put('/contacts/:id', (req, res) => {
         let phone = req.body.phone;
 
         client.query(' UPDATE salesforce.Contact SET firstname = $1, lastname = $2, email = $3, phone = $4 WHERE id = $5', [firstname, lastname, email, phone, id]).then((data) => {
-            console.log("contact has been updated")
-            res.json("contact has been updated");
+            console.log(data);
+            res.json(data);
 
         });
     } catch (err) {
@@ -127,12 +127,9 @@ app.put('/contacts/:id', (req, res) => {
 app.patch('/contacts/:id', (req, res) => {
     try {
         const { id } = req.params;
-        client.query('UPDATE salesforce.Contact SET isActive__c = false WHERE contacts_id = $1', [id]).then((data) => {
-            if (data.rowCount !== 0) {
-                res.json(data);
-            } else {
-                res.send('Something went wrong')
-            }
+        client.query('UPDATE salesforce.Contact SET isActive__c = false WHERE id = $1', [id]).then((data) => {
+            res.json(data);
+
         });
     } catch (err) {
         console.error(err.message);
@@ -140,16 +137,29 @@ app.patch('/contacts/:id', (req, res) => {
 
 });
 
+
+app.get('/account', (req, res) => {
+    try {
+        client.query('SELECT * FROM salesforce.account').then((data) => {
+            console.log(data.rows);
+            res.json(data.rows);
+        });
+
+    } catch (err) {
+        console.error(err.message);
+
+    }
+});
 //create new contract
 
 app.post('/contract', (req, res) => {
     try {
-        let { accountName } = req.body.name;
-        let { date } = req.body.date;
-        let { contrTerm } = req.body.contractTerm;
-        let { accId } = '';
-        client.query('SELECT sfid FROM salesforce.Account WHERE name = $1', [accountName]).then((cData) => {
-            accId = accData.rows[0].sfid;
+        let accountName = req.body.name;
+        let date = req.body.date;
+        let contrTerm = req.body.contractTerm;
+        let accId = '';
+        client.query('SELECT sfid FROM salesforce.account WHERE name = $1', [accountName]).then((cData) => {
+            accId = cData.rows[0].sfid;
             client.query('INSERT INTO salesforce.Contract (accountId, startDate, contractTerm) VALUES ($1, $2, $3)', [accId, date, contrTerm], (err, data) => {
                 res.json(data);
             })
@@ -180,4 +190,4 @@ app.put('/contract', (req, res) => {
 
 
 
-app.listen(port, () => console.log(`listening on ${port}`));
+app.listen(port, () => console.log(`listening on ${ port }`));
