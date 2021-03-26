@@ -50,9 +50,7 @@ app.get('/contact', (req, res) => {
 
 
 
-// create a contact after checking if it already exists or not
-
-
+// create a contact after checking if it already exists
 
 
 
