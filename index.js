@@ -29,7 +29,7 @@ client.connect(err => {
 
 
 
-
+// get all contacts
 
 app.get('/contact', (req, res) => {
     try {
@@ -46,11 +46,9 @@ app.get('/contact', (req, res) => {
 
 
 
-
-
-
-
 // create a contact after checking if it already exists
+// return sfid if the contact already exists.// return sfid if the contact already exists.
+
 
 
 
@@ -66,7 +64,7 @@ app.post('/contact', (req, res) => {
             if (data !== undefined) {
                 if (data.rowCount == 0) {
                     createContact = client.query('INSERT INTO salesforce.Contact (email, lastname, firstname, phone)  VALUES ($1, $2, $3, $4)', [email, lastname, firstname, phone]).then((d) => {
-                        res.send("contact has been added successfully");
+                        res.send(d);
                     });
                 } else {
                     createContact = client.query('SELECT sfid, id FROM salesforce.Contact WHERE email = $1', [email]).then((data) => {
@@ -227,7 +225,6 @@ app.put('/contract/:id', (req, res) => {
         console.error(err.message);
     }
 });
-
 
 
 app.listen(port, () => console.log(`listening on ${ port }`));
