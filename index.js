@@ -207,7 +207,7 @@ app.get('/contract/:id', (req, res) => {
 });
 
 
-//update contract
+//update contract by sfid and id
 app.put('/contract/:id', (req, res) => {
     try {
         const { id } = req.params;
