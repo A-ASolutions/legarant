@@ -31,7 +31,7 @@ client.connect(err => {
 
 
 
-app.get('/contacts', (req, res) => {
+app.get('/contact', (req, res) => {
     try {
         client.query('SELECT * FROM salesforce.contact').then((data) => {
             console.log(data.rows);
@@ -56,7 +56,7 @@ app.get('/contacts', (req, res) => {
 
 
 
-app.post('/contacts', (req, res) => {
+app.post('/contact', (req, res) => {
 
     try {
         let email = req.body.email;
@@ -89,7 +89,7 @@ app.post('/contacts', (req, res) => {
 
 // get a contact based on ID
 
-app.get('/contacts/:id', (req, res) => {
+app.get('/contact/:id', (req, res) => {
     try {
         const { id } = req.params;
 
@@ -103,8 +103,8 @@ app.get('/contacts/:id', (req, res) => {
     }
 });
 
-//update a contact
-app.put('/contacts/:id', (req, res) => {
+//update the contact
+app.put('/contact/:id', (req, res) => {
     try {
         const { id } = req.params;
         let firstname = req.body.firstname;
@@ -122,9 +122,10 @@ app.put('/contacts/:id', (req, res) => {
     }
 });
 
+
 //deactivate a contact
 
-app.patch('/contacts/:id', (req, res) => {
+app.patch('/contact/:id', (req, res) => {
     try {
         const { id } = req.params;
         client.query('UPDATE salesforce.Contact SET isActive__c = false WHERE id = $1', [id]).then((data) => {
@@ -138,6 +139,7 @@ app.patch('/contacts/:id', (req, res) => {
 });
 
 
+// get accounts
 app.get('/account', (req, res) => {
     try {
         client.query('SELECT * FROM salesforce.account').then((data) => {
@@ -150,17 +152,35 @@ app.get('/account', (req, res) => {
 
     }
 });
+
+// get contracts
+
+app.get('/contract', (req, res) => {
+    try {
+        client.query('SELECT * FROM salesforce.contract').then((data) => {
+            console.log(data.rows);
+            res.json(data.rows);
+        });
+
+    } catch (err) {
+        console.error(err.message);
+
+    }
+});
+
+
+
 //create new contract
 
 app.post('/contract', (req, res) => {
     try {
-        let accountName = req.body.name;
+        let accName = req.body.name;
         let date = req.body.date;
         let contrTerm = req.body.contractTerm;
         let accId = '';
-        client.query('SELECT sfid FROM salesforce.account WHERE name = $1', [accountName]).then((cData) => {
-            accId = cData.rows[0].sfid;
-            client.query('INSERT INTO salesforce.Contract (accountId, startDate, contractTerm) VALUES ($1, $2, $3)', [accId, date, contrTerm], (err, data) => {
+        client.query('SELECT sfid FROM salesforce.account WHERE name = $1', [accName]).then((acData) => {
+            accId = acData.rows[0].sfid;
+            client.query('INSERT INTO salesforce.Contract (accountId, startDate, contractTerm) VALUES ($1, $2, $3)', [accId, date, contrTerm]).then((data) => {
                 res.json(data);
             })
 
@@ -170,22 +190,44 @@ app.post('/contract', (req, res) => {
     }
 });
 
-//update contract
-app.put('/contract', (req, res) => {
-    let { accountName } = req.params;
-    let { accSfid } = '';
-    let { contrTerm } = req.body.contractTerm;
-    let { date } = req.body.date;
-    let { status } = req.body.status;
 
-    client.query('SELECT sfid FROM salesfoce.Account WHERE name = $1', [accountName], (err, acData) => {
-        accSfid = acData.rows[0].sfid;
+//get a contract by id
+app.get('/contract/:id', (req, res) => {
+    try {
+        const { id } = req.params;
 
-        client.query('UPDATE salesforce.Contract SET contractTerm = $1, startDate = $2, status = $3 WHERE accountId = $4', [contrTerm, date, status, accSfid], (err, data) => {
-            res.json(data);
+        client.query('SELECT * FROM salesforce.contract WHERE id = $1', [id]).then((data) => {
+            console.log(data.rows[0]);
+            res.json(data.rows[0]);
         });
-    });
 
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+
+//update contract
+app.put('/contract/:id', (req, res) => {
+    try {
+        const { id } = req.params;
+
+        let accountName = req.body.name;
+        let accSfid = '';
+        let contrTerm = req.body.contractTerm;
+        let date = req.body.date;
+        let status = req.body.status;
+
+        client.query('SELECT sfid FROM salesforce.account WHERE name = $1', [accountName]).then((acData) => {
+            accSfid = acData.rows[0].sfid;
+
+            client.query('UPDATE salesforce.Contract SET contractTerm = $1, startDate = $2, status = $3 WHERE accountId = $4 AND id = $5', [contrTerm, date, status, accSfid, id]).then((data) => {
+                res.json(data);
+            });
+        });
+    } catch (err) {
+        console.error(err.message);
+    }
 });
 
 
