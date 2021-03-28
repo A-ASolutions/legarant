@@ -63,8 +63,11 @@ app.post('/contact', (req, res) => {
         let createContact = client.query('SELECT sfid, id FROM salesforce.Contact WHERE email=$1', [email]).then((data) => {
             if (data !== undefined) {
                 if (data.rowCount == 0) {
-                    createContact = client.query('INSERT INTO salesforce.Contact (email, lastname, firstname, phone)  VALUES ($1, $2, $3, $4)', [email, lastname, firstname, phone]).then((d) => {
-                        res.send(d);
+                    createContact = client.query('INSERT INTO salesforce.Contact (email, lastname, firstname, phone)  VALUES ($1, $2, $3, $4) RETURNING id',
+
+                        [email, lastname, firstname, phone]).then((d) => {
+
+                        res.json(d.rows[0].id);
                     });
                 } else {
                     createContact = client.query('SELECT sfid, id FROM salesforce.Contact WHERE email = $1', [email]).then((data) => {
@@ -108,7 +111,9 @@ app.put('/contact/:id', (req, res) => {
         let email = req.body.email;
         let phone = req.body.phone;
 
-        client.query(' UPDATE salesforce.Contact SET firstname = $1, lastname = $2, email = $3, phone = $4 WHERE id = $5', [firstname, lastname, email, phone, id]).then((data) => {
+        client.query(' UPDATE salesforce.Contact SET firstname = $1, lastname = $2, email = $3, phone = $4 WHERE id = $5',
+
+            [firstname, lastname, email, phone, id]).then((data) => {
             console.log(data);
             res.json(data);
 
@@ -124,7 +129,9 @@ app.put('/contact/:id', (req, res) => {
 app.patch('/contact/:id', (req, res) => {
     try {
         const { id } = req.params;
-        client.query('UPDATE salesforce.Contact SET isActive__c = false WHERE id = $1', [id]).then((data) => {
+        client.query('UPDATE salesforce.Contact SET isActive__c = false WHERE id = $1',
+
+            [id]).then((data) => {
             res.json(data);
 
         });
@@ -176,8 +183,10 @@ app.post('/contract', (req, res) => {
         let accId = '';
         client.query('SELECT sfid FROM salesforce.account WHERE name = $1', [accName]).then((acData) => {
             accId = acData.rows[0].sfid;
-            client.query('INSERT INTO salesforce.Contract (accountId, startDate, contractTerm) VALUES ($1, $2, $3)', [accId, date, contrTerm]).then((data) => {
-                res.json(data);
+            client.query('INSERT INTO salesforce.Contract (accountId, startDate, contractTerm) VALUES ($1, $2, $3) RETURNING id',
+
+                [accId, date, contrTerm]).then((data) => {
+                res.json(data.rows[0].id);
             })
 
         })
@@ -203,7 +212,7 @@ app.get('/contract/:id', (req, res) => {
 });
 
 
-//update contract by sfid and id
+//update contract by id and sfid
 app.put('/contract/:id', (req, res) => {
     try {
         const { id } = req.params;
@@ -217,7 +226,9 @@ app.put('/contract/:id', (req, res) => {
         client.query('SELECT sfid FROM salesforce.account WHERE name = $1', [accountName]).then((acData) => {
             accSfid = acData.rows[0].sfid;
 
-            client.query('UPDATE salesforce.Contract SET contractTerm = $1, startDate = $2, status = $3 WHERE accountId = $4 AND id = $5', [contrTerm, date, status, accSfid, id]).then((data) => {
+            client.query('UPDATE salesforce.Contract SET contractTerm = $1, startDate = $2, status = $3 WHERE accountId = $4 AND id = $5',
+
+                [contrTerm, date, status, accSfid, id]).then((data) => {
                 res.json(data);
             });
         });
